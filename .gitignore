@@ -1,5 +1,6 @@
 **/.idea/
 **/out/
 
-#**/css/bootstrap*
-#**/js/bootstrap*
+**/css/bootstrap*
+**/js/bootstrap*
+board1/src/main/resources/static/js/jquery-3.7.0.js
