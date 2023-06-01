@@ -1,0 +1,5 @@
+**/.idea/
+**/out/
+
+#**/css/bootstrap*
+#**/js/bootstrap*
