@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스프링부트 게시판</title>
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <script src="/js/jquery-3.7.0.js"></script>
+  <script src="/js/bootstrap.bundle.js"></script>
+
+  <style>
+
+  </style>
+  <script>
+
+  </script>
+</head>
+<body>
+<main class="container">
+  <table class="table table-hover table-striped">
+    <colgroup>
+      <col style="width: 10%"/>
+      <col style="width: 50%"/>
+      <col style="width: 15%"/>
+      <col style="width: 20%"/>
+      <col style="width: 5%"/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>글번호</th>
+        <th>제목</th>
+        <th>글쓴이</th>
+        <th>작성일</th>
+        <th>조회수</th>
+      </tr>
+    </thead>
+    <tbody>
+<!--    기본 모양은 html 태그로 구성하고, 데이터가 출력되는 부분은 thymeleaf 템플릿 엔진을 통해서 서버에서 전달된 데이터를 화면에 출력함-->
+<!--${변수명 or 객체명} : thymeleaf에서 변수 및 객체의 데이터를 가져오는 방법-->
+<!--th:text : 해당 html 태그의 시작 태그와 끝 태그 사이에 문자를 입력-->
+<!--th:if : thymeleaf를 사용하여 단순 if문으로 동작, 결과가 true일 경우 동작 -->
+<!--th:unless : thymeleaf를 사용하여 단순 if문으로 동작, 결과가 false일 경우 동작-->
+<!--th:each : thymeleaf를 사용하여 반복문을 구현-->
+<!--jstl과 비슷함-->
+      <tr th:if="${#lists.size(boardList)} > 0" th:each="item : ${boardList}">
+        <td th:text="${item.boardIdx}">1</td>
+        <td th:text="${item.title}">테스트 제목 1</td>
+        <td th:text="${item.createId}">테스터 1</td>
+        <td th:text="${item.createDt}">2023-06-01 12:25:00</td>
+        <td th:text="${item.hitCnt}">0</td>
+      </tr>
+      <tr th:unless="${#lists.size(boardList)} > 0">
+        <td colspan="5">조회된 결과가 없습니다.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p th:text="${apple}"></p>
+  <p th:text="${samsung}"></p>
+</main>
+</body>
+</html>
