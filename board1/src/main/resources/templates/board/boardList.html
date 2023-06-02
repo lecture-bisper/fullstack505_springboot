@@ -16,7 +16,16 @@
   </script>
 </head>
 <body>
-<main class="container">
+<header>
+  <div class="container p-5">
+    <div class="text-center">
+      <h1 class="">스프링부트로 게시판 만들기</h1>
+      <h3 class="">게시판 목록 페이지</h3>
+    </div>
+  </div>
+</header>
+
+<main class="container my-4">
   <table class="table table-hover table-striped">
     <colgroup>
       <col style="width: 10%"/>
@@ -44,7 +53,9 @@
 <!--jstl과 비슷함-->
       <tr th:if="${#lists.size(boardList)} > 0" th:each="item : ${boardList}">
         <td th:text="${item.boardIdx}">1</td>
-        <td th:text="${item.title}">테스트 제목 1</td>
+        <td>
+          <a href="/board/openBoardDetail.do?boardIdx=" th:attrappend="href=${item.boardIdx}" th:text="${item.title}" class="text-decoration-none">테스트 제목 1</a>
+        </td>
         <td th:text="${item.createId}">테스터 1</td>
         <td th:text="${item.createDt}">2023-06-01 12:25:00</td>
         <td th:text="${item.hitCnt}">0</td>
@@ -55,8 +66,13 @@
     </tbody>
   </table>
 
-  <p th:text="${apple}"></p>
-  <p th:text="${samsung}"></p>
+  <div class="d-flex justify-content-end">
+    <a href="/board/writeBoard.do" class="btn btn-primary">글쓰기</a>
+  </div>
 </main>
+
+<footer class="container-fluid border-top p-5 mt-5 text-center">
+  <p class="lead text-muted">made by fullstack 505</p>
+</footer>
 </body>
 </html>
