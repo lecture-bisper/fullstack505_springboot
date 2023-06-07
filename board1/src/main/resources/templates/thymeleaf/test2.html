@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>타임리프 사용법</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+
+  </script>
+</head>
+<body>
+<div class="container">
+  <div>
+    <h3>선택 변수 출력하기, *{}</h3>
+<!--    *{} : 타임리프에서 변수를 출력하는 ${}하고 같은 기능을 함-->
+<!--    ${} 일반 변수 출력 시는 그대로 사용하고, list나 객체 타입의 변수를 출력 시 '객체명.변수명'으로 출력해야 함-->
+<!--    '객체명.변수명' 형태에서 변수명으로만 사용하고자 할 경우 사용하는 것이 *{} 임 -->
+<!--    부모 태그에 th:object 를 사용하고 출력하고자 하는 객체를 설정-->
+<!--    자식 태그에는 th:text 에서 변수명으로만 사용이 가능함 -->
+
+    <div>
+      <h4>일반적인 ${} 형태로 출력</h4>
+      <p th:text="${board.boardIdx}"></p>
+      <p th:text="${board.title}"></p>
+      <p th:text="${board.contents}"></p>
+      <p th:text="${board.createId}"></p>
+      <p th:text="${board.createDt}"></p>
+    </div>
+    <div th:object="${board}">
+      <h4>선택 변수 출력 방식 *{}으로 출력</h4>
+      <p th:text="*{boardIdx}"></p>
+      <p th:text="*{title}"></p>
+      <p th:text="*{contents}"></p>
+      <p th:text="*{createId}"></p>
+      <p th:text="*{createDt}"></p>
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div>
+    <h3>리터럴 사용하기</h3>
+
+    <div>
+      <h4>문자열 사용하기, ' '</h4>
+<!--      작은 따옴표 안에 텍스트를 입력 시 문자열로 출력 됨-->
+<!--      미리 생성해 놓은 문자열(리소스 번들)을 사용할 경우 #{}을 사용함-->
+<!--      문자열로써의 ' ' 를 출력 시 \' 형태로 사용함-->
+<!--      + 기호를 사용하여 여러개의 문자열을 연결할 수 있음-->
+      <p th:text="'변경할 문자열'">원본 문자열</p>
+      <p th:text="#{hello}">원본 문자열</p>
+      <p th:text="'변경할 \'문자열\''">원본 문자열</p>
+      <p th:text="'여러개' + ' 문자열을 ' + ' + ' + '기호로 연결함'">원본 문자열</p>
+      <p th:text="${str1} + ' 문자열, ' + ${str2} + ' 문자열'">원본 문자열</p>
+    </div>
+    <br>
+    <div>
+      <h4>리터럴 대체, || 사용하기</h4>
+<!--      변수와 문자열을 연결하여 사용 시 + 기호를 사용하여 연결하지만 || 를 사용하면 문자열과 변수를  + 기호없이 바로 사용할 수 있음-->
+<!--      || 사이에 문자열과 변수를 출력하기 위한 ${}를 동시에 사용함-->
+      <p th:text="${str1} + ' 문자열, ' + ${str2} + ' 문자열'">원본 문자열</p>
+      <p th:text="|${str1} 문자열, ${str2} 문자열|">원본 문자열</p>
+    </div>
+    <br>
+    <div>
+      <h4>숫자 사용하기</h4>
+<!--      일반적인 숫자를 그대로 사용 함, 123, 1, 100-->
+      <p th:text="10000">원본 문자열</p>
+      <p th:text="10.5">원본 문자열</p>
+    </div>
+    <br>
+    <div>
+      <h4>boolean 타입 사용하기</h4>
+<!--      true, false 를 그대로 사용 함, true, false-->
+      <p th:text="true">원본 문자열</p>
+      <p th:text="false">원본 문자열</p>
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div>
+    <h3>연산자 사용하기</h3>
+    <div>
+      <h4>+, - , *, /, % 사용하기</h4>
+      <!--    +, -, *, /, % 연산자를 사용하여 간단한 산술 연산이 가능함-->
+
+      <p th:text="|${num1} + ${num2} = ${num1 + num2}|"> + 연산자 사용하기</p>
+      <p th:text="|${num1} - ${num2} = ${num1 - num2}|"> - 연산자 사용하기</p>
+      <p th:text="|${num1} * ${num2} = ${num1 * num2}|"> * 연산자 사용하기</p>
+      <p th:text="|${num1} / ${num2} = ${num1 / num2}|"> / 연산자 사용하기</p>
+      <p th:text="|${num1} % ${num2} = ${num1 % num2}|"> % 연산자 사용하기</p>
+    </div>
+
+    <br>
+
+    <div>
+      <h4><, <=, >, >=, ==, !=, ! 사용하기</h4>
+<!--      비교 연산자를 사용하여 비교 연산이 가능함-->
+<!--      lt, le, gt, ge, eq, ne, not 을 사용해도 상관없음-->
+      <p>1 < 100 = <span th:text="1 < 100"></span></p>
+      <p>1 > 100 = <span th:text="1 > 100"></span></p>
+      <p>1 >= 100 = <span th:text="1 >= 100"></span></p>
+      <p>1 <= 100 = <span th:text="1 <= 100"></span></p>
+      <p>1 == 100 = <span th:text="1 == 100"></span></p>
+      <p>1 != 100 = <span th:text="1 != 100"></span></p>
+      <p>!true = <span th:text="!true"></span></p>
+      <p>1 lt 100 = <span th:text="1 lt 100"></span></p>
+      <p>1 gt 100 = <span th:text="1 gt 100"></span></p>
+      <p>1 le 100 = <span th:text="1 le 100"></span></p>
+      <p>1 ge 100 = <span th:text="1 ge 100"></span></p>
+      <p>1 eq 100 = <span th:text="1 eq 100"></span></p>
+      <p>1 ne 100 = <span th:text="1 ne 100"></span></p>
+      <p>not true = <span th:text="not true"></span></p>
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div>
+    <h3>조건문 사용하기</h3>
+
+    <div>
+      <h4>삼항 연산자 사용</h4>
+<!--      자바의 삼항 연산자와 동일한 형태로 사용함-->
+<!--      '조건식 ? 참일경우 실행 : 거짓일 경우 실행' 방식으로 사용함 -->
+<!--      참일 경우 혹은 거짓일 경우에만 화면에 출력하도록 하는 것이 가능함-->
+<!--      변수에 저장된 데이터가 null 일 경우에만 출력하기도 가능함 -->
+<!--      참만 출력 시 : 을 생략-->
+<!--      거짓만 출력 시 ?: 형태로 사용-->
+      <p>(10 % 2 == 0) ? '짝수' : '홀수' = <span th:text="(10 % 2 == 0) ? '짝수' : '홀수'"></span></p>
+      <p>num3 = <span th:text="${num3 % 2 == 0} ? '짝수':'홀수'"></span></p>
+      <div>str3의 값이 null이 아니면 p태그 출력
+        <p th:text="${str3} ? '<button>null 이 아니면 출력</button>' "></p>
+      </div>
+      <div>str3의 값이 null이면 p태그 출력
+        <p th:text="${str3} ?:'<button>null 이면 출력</button>'"></p>
+      </div>
+
+    </div>
+    <br>
+    <div>
+      <h4>if, unless문 사용하기</h4>
+<!--      if : 자바 혹은 자바스크립트의 단순 if문과 동일한 형태로 사용하는 명령어-->
+<!--      if의 결과가 true일 경우 자식 태그의 내용을 출력하는 형태로 사용함-->
+<!--      unless : if문과 동일한 형태로 사용하는 명령어-->
+<!--      unless의 결과가 false일 경우 자식 태그의 내용을 출력하는 형태로 사용함-->
+<!--      th:if, th:unless 형태로 사용함-->
+<!--      if와 unless 연속으로 사용하여 자바 및 자바스크립트의 if ~ else문과 동일한 형태로 사용할 수 있음-->
+<!--      if와 unless를 사용하여 if ~ else 형태를 구현할 경우 if의 조건과 unless의 조건을 동일하게 설정해야 함-->
+      <div th:if="${num3 > 5}">
+        <p>if 조건식의 결과가 true일 경우 출력</p>
+      </div>
+      <div th:unless="${num3 > 5}">
+        <p>unless 조건식의 결과가 true일 경우 미 출력</p>
+      </div>
+      <div th:if="${num3 < 5}">
+        <p>if 조건식의 결과가 false일 경우 미 출력</p>
+      </div>
+      <div th:nuless="${num3 < 5}">
+        <p>unless 조건식의 결과가 false일 경우 출력</p>
+      </div>
+    </div>
+    <br>
+    <div>
+      <h4>switch 문 사용하기</h4>
+<!--      자바 및 자바스크립트의 switch ~ case 문을 구현할 수 있음-->
+<!--      부모 태그에 th:switch=${변수} 를 설정하고 자식 태그에 th:case="값" 을 설정하여 사용-->
+<!--      자식 태그의 해당 값에 맞는 case 를 출력함-->
+
+      <div th:switch="${level}">
+        <p th:case="'A'">성적이 A 입니다.</p>
+        <p th:case="'B'">성적이 B 입니다.</p>
+        <p th:case="'C'">성적이 C 입니다.</p>
+        <p th:case="'D'">성적이 D 입니다.</p>
+        <p th:case="'F'">성적이 F 입니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div>
+    <h3>반복문 사용하기</h3>
+<!--    th:each 를 사용하여 반복문을 구현함-->
+<!--    자바의 향상된 for문과 사용방법이 비슷-->
+<!--    부모 태그에 th:each="변수명 : ${배열 및 리스트}" 를 설정-->
+<!--    자식 태그에 ${변수명} 으로 사용함-->
+<!--    주로 if 문을 함께 사용하여 배열 혹은 리스트의 크기를 확인 후 사용하는 형태로 사용함-->
+
+<!--    each 는 반복 상태 변수를 제공함-->
+<!--    1. 변수명Stat.상태변수 형식으로 사용함-->
+<!--    2. 변수명 설정 시 상태 변수도 함께 설정-->
+<!--    index : 현재 반복 인덱스 (0부터 시작) -->
+<!--    count : 현재 반복 인덱스 (1부터 시작) -->
+<!--    size : 총 요소 수 -->
+<!--    current : 현재 요소 -->
+<!--    even : 현재 반복이 짝수인지 확인 true, false -->
+<!--    odd : 현재 반복이 홀수인지 확인 true, false -->
+<!--    first : 현재 반복이 첫번째인지 확인 true, false -->
+<!--    last : 현재 반복이 마지막인지 확인 true, false -->
+
+    <div>
+      <h4>배열 사용 시 </h4>
+
+      <div th:each="item : ${itemArray}">
+        <p th:text="${item}"></p>
+      </div>
+    </div>
+    <br>
+    <div>
+      <h4>리스트 사용 시 </h4>
+
+      <div th:each="item : ${itemList}">
+        <p th:text="${item}"></p>
+      </div>
+      <br>
+      <div th:each="item : ${boardList}">
+        <p th:text="${item.boardIdx}"></p>
+        <p th:text="${item.title}"></p>
+        <p th:text="${item.contents}"></p>
+        <p th:text="${item.createId}"></p>
+        <p th:text="${item.createDt}"></p>
+        <p th:text="${item.hitCnt}"></p>
+        <hr>
+      </div>
+      <br>
+<!--      th:object를 사용 시 *{} 선택 변수 출력 방식을 사용할 수 있음-->
+      <div th:each="item : ${boardList}" th:object="${item}">
+        <p th:text="*{boardIdx}"></p>
+        <p th:text="*{title}"></p>
+        <p th:text="*{contents}"></p>
+        <p th:text="*{createId}"></p>
+        <p th:text="*{createDt}"></p>
+        <p th:text="*{hitCnt}"></p>
+        <hr>
+      </div>
+      <br>
+<!--      if 문을 사용하여 배열 및 리스트의 크기를 확인하고 th:each를 사용-->
+      <div th:if="${#lists.size(boardList)} > 0" th:each="item : ${boardList}">
+        <p th:text="${item.boardIdx}"></p>
+        <p th:text="${item.title}"></p>
+        <p th:text="${item.contents}"></p>
+        <p th:text="${item.createId}"></p>
+        <p th:text="${item.createDt}"></p>
+        <p th:text="${item.hitCnt}"></p>
+        <hr>
+      </div>
+      <br>
+<!--      if문으로 배열의 크기 확인 후 each 사용-->
+      <div th:if="${#arrays.length(itemArray)} > 0" th:each="item : ${itemArray}">
+        <p th:text="${item}"></p>
+      </div>
+
+      <br>
+      <h4>상태 변수 사용하기 1번 방식</h4>
+      <div th:each="item : ${boardList2}">
+        <p>index : <span th:text="${itemStat.index}"></span>, value : <span th:text="${item.title}"></span></p>
+      </div>
+
+      <br>
+      <h4>상태 변수 사용하기 2번 방식</h4>
+      <div th:each="item, itemStat : ${boardList2}">
+        <p>index : <span th:text="${itemStat.index}"></span>, value : <span th:text="${item.title}"></span></p>
+      </div>
+      <br>
+      <h4>상태 변수 사용하기 </h4>
+      <div th:each="item : ${boardList2}">
+        <p>index : <span th:text="${itemStat.index}"></span></p>
+        <p>count : <span th:text="${itemStat.count}"></span></p>
+        <p>current : <span th:text="${itemStat.current}"></span></p>
+        <p>size : <span th:text="${itemStat.size}"></span></p>
+        <p>even : <span th:text="${itemStat.even}"></span></p>
+        <p>odd : <span th:text="${itemStat.odd}"></span></p>
+        <p>first : <span th:text="${itemStat.first}"></span></p>
+        <p>last : <span th:text="${itemStat.last}"></span></p>
+        <hr>
+      </div>
+
+      <div th:each="arr : ${itemArray}">
+        <p>index : <span th:text="${arrStat.index}"></span></p>
+        <p>count : <span th:text="${arrStat.count}"></span></p>
+        <p>size : <span th:text="${arrStat.size}"></span></p>
+        <p>current : <span th:text="${arrStat.current}"></span></p>
+        <p>odd : <span th:text="${arrStat.odd}"></span></p>
+        <p>even : <span th:text="${arrStat.even}"></span></p>
+        <p>first : <span th:text="${arrStat.first}"></span></p>
+        <p>last : <span th:text="${arrStat.last}"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <br><hr><br>
+  <div>
+    <h3>html 태그 속성값 설정</h3>
+<!--    thymeleaf에는 th:attr 이라는 속성을 사용하여 html 태그의 속성값을 변경할 수 있음-->
+<!--    th:attr="html 속성명=수정할 값" 형태로 사용함-->
+<!--    th:attrappend, th:attrprepend 라는 속성을 사용하여 지정된 html 태그 속성의 값에 데이터를 추가하는 것도 가능함-->
+<!--    th:attrappend="html속성명=뒤에 추가할 값" 형태로 사용하여 기존 값에 데이터를 뒤에 추가함-->
+<!--    th:attrprepend="html속성명=앞에 추가할 값" 형태로 사용하여 기존 값의 앞에 데이터를 추가함-->
+<!--    thymeleaf에는 html 태그에서 사용되는 거의 모든 종류의 속성을 제공하기 때문에 'th:attr'보다 'th:html속성명' 형태로 사용하는 것을 권장함-->
+
+    <div>
+      <a href="https://www.daum.net" target="_blank">다음 홈페이지(html에 직접 입력)</a>
+      <a href="" th:attr="href=@{https://www.daum.net}" th:target="_blank">다음 홈페이지 (th:attr로 수정)</a>
+      <a href="" th:href="@{https://www.daum.net}" th:target="_blank">다음 홈페이지 (thymeleaf로 href 수정)</a>
+      <br>
+      <button type="button">버튼 태그</button>
+      <button type="button" th:class="'btn btn-primary'">버튼 태그 (thymeleaf로 class 속성 추가)</button>
+      <button type="button" class="btn" th:attrappend="class=' btn-primary'">버튼 태그 (thymeleaf로 버튼 색상 클래스를 뒤에 추가)</button>
+      <button type="button" class="btn-success" th:attrprepend="class='btn '">버튼 태그 (thymeleaf로 버튼 버튼 클래스를 앞에 추가)</button>
+
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div>
+    <h3>고정값 논리 속성 사용하기</h3>
+<!--    html 태그 속성 중 속성명 자체로 값이 되는 속성(readonly, disabled 등)의 값을 설정-->
+<!--    컨트롤러에서 전달된 논리 데이터를 사용하여 해당 'th:고정값속성명'에 설정하여 사용-->
+
+    <div>
+      <input type="checkbox" value="사과" th:checked="${chkVal}">사과
+      <input type="checkbox" value="참외">참외
+      <input type="checkbox" value="수박" th:checked="${chkVal}">수박
+      <input type="checkbox" value="복숭아">복숭아
+      <br>
+      <select class="form-control" th:multiple="${mulVal}">
+        <option value="사과">사과</option>
+        <option value="참외">참외</option>
+        <option value="수박" th:selected="${selVal}">수박</option>
+        <option value="복숭아" th:selected="${selVal}">복숭아</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
