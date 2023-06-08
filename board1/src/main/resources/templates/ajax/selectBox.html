@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ajax 통신으로 selectBox 내용 가져오기</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+    // 문제 1) ajaxCalView 파일을 참고하여 계산기 프로그램을 작성하세요
+    // * 입력 데이터 3개 (숫자1, 숫자2, 연산자)
+    // * 연산자는 +, -, *, /
+    // * 입력된 숫자와 연산자를 선택하고 '계산' 버튼 클릭 시 화면 아래에 연산 결과가 출력되야 함
+    // * alert()을 사용하여 연산 결과를 출력해도 상관없음
+    // * 파일명 : quiz1.html
+
+    // 문제 2) selectBox 파일을 수정하여 구 정보를 선택 시 동 정보가 출력되도록 select 태그를 하나 더 추가하고, 주소 출력 버튼을 클릭 시 전체 주소가 화면에 출력되는 프로그램을 작성하세요
+    // * 세번째 select 태그 id = sel3
+    // * 주소 출력 버튼은 일반 버튼, id = btn-addr
+    // * 내용 처리를 위한 함수를 따로 생성해서 사용해도 상관없음
+    // * 파일명 : quiz2.html
+
+    $(document).ready(function() {
+
+      // selectbox 의 내용이 변경될 경우 이벤트 발생
+      $("#sel1").on("change", function() {
+        // sel1의 자식 태그 중 selected 속성이 있는 태그의 값을 가져옴
+        const selectValue = $("#sel1 option:selected").val();
+        // 서버로 전송할 데이터 생성
+        const datas = {areaName: selectValue};
+
+        // ajax 통신 설정
+        $.ajax({
+          url: "/ajax/selectBox1", // 주소 설정
+          type: "POST", // 통신 방식
+          data: datas, // 위에서 생성한 데이터를 설정
+          success: function(data) { // 통신 성공 시 실행할 함수
+            // 서버에서 전송된 데이터의 길이가 0 이상일 경우 화면 다시 그리기
+            if (data.length > 0) {
+              // 새로 그려줄 태그 선택
+              const sel2 = $("#sel2");
+              sel2.empty(); // 지정한 태그의 자손 태그를 모두 삭제
+
+              // 첫번째 option 태그 추가
+              let opt = "<option value=''>선택하세요</option>";
+
+              // 서버에서 전송된 내용으로 option 태그 생성
+              for (let i = 0; i < data.length; i++) {
+                opt += "<option value='" + data[i].areaName + "'>" + data[i].areaName + "</option>";
+              }
+              // 지정한 sel2에 생성된 태그를 추가
+              sel2.append(opt);
+            }
+          },
+          error: function() { // 통신 오류 시 실행할 함수
+            alert("서버와 통신 시 오류가 발생했습니다.");
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container my-4">
+  <div class="row">
+    <div class="col-sm-6 mx-auto">
+      <h3>ajax를 이용하여 select box의 내용 변경하기</h3>
+      <br>
+      <div class="row">
+        <div class="col-sm">
+          <select class="form-control me-3" id="sel1">
+            <option value="" selected="selected">선택하세요</option>
+            <option value="서울">서울</option>
+            <option value="대전">대전</option>
+            <option value="대구">대구</option>
+            <option value="부산">부산</option>
+          </select>
+        </div>
+        <div class="col-sm">
+          <select class="form-control" id="sel2">
+            <option value="">선택하세요</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
