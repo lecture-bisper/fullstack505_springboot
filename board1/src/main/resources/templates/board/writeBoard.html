@@ -35,7 +35,8 @@
 <main class="container my-4">
   <div class="row">
     <div class="col-sm-4 mx-auto">
-      <form action="/board/insertBoard.do" method="post">
+<!--      파일 업로드를 위해서 form 태그에 enctype="multipart/form-data" 속성 추가-->
+      <form action="/board/insertBoard.do" method="post" enctype="multipart/form-data">
         <div class="my-3">
           <label for="title" class="form-label">글 제목 : </label>
 <!--          input 태그의 name 속성값을 DTO 클래스의 필드명으로 설정해야 함-->
@@ -48,6 +49,11 @@
         <div class="my-3">
           <label for="contents" class="form-label">내용 : </label>
           <textarea class="form-control" id="contents" name="contents" rows="5" placeholder="글 내용을 입력하세요"></textarea>
+        </div>
+<!--        첨부 파일을 위한 input 태그 추가-->
+        <div class="my-3">
+          <label for="files" class="form-label">첨부파일 : </label>
+          <input type="file" class="form-control" id="files" name="files" multiple>
         </div>
         <div class="my-3 d-grid gap-3">
           <button type="submit" class="btn btn-primary">등록</button>

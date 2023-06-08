@@ -4,7 +4,11 @@ import com.bitc.board1.dto.BoardDto;
 import com.bitc.board1.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.Iterator;
 import java.util.List;
 
 //@Service : 해당 클래스가 상속받은 interface 이름으로 동작하도록 설정하는 어노테이션
@@ -42,12 +46,32 @@ public class BoardServiceImpl implements BoardService{
 
   //  게시판 글 등록 구현
   @Override
-  public void insertBoard(BoardDto board) throws Exception {
+  public void insertBoard(BoardDto board, MultipartHttpServletRequest uploadFiles) throws Exception {
 //    1. 컨트롤러에서 전달된 데이터 가져오기
 //    2. mapper 를 사용하여 DB에 데이터 등록
 
 //    전달받은 데이터를 매개변수로 사용하여 mybatis mapper의 insertBoard() 메소드 실행
-    boardMapper.insertBoard(board);
+//    boardMapper.insertBoard(board);
+
+//    서버로 전달된 파일 정보를 분석
+    if (ObjectUtils.isEmpty(uploadFiles) == false) {
+      Iterator<String> iterator = uploadFiles.getFileNames();
+      String name;
+
+      while (iterator.hasNext()) {
+        name = iterator.next();
+        List<MultipartFile> fileInfoList = uploadFiles.getFiles(name);
+
+        for (MultipartFile fileInfo : fileInfoList) {
+          System.out.println("***** start file info *****");
+          System.out.println("file name : " + fileInfo.getOriginalFilename());
+          System.out.println("file size : " + fileInfo.getSize());
+          System.out.println("file content type : " + fileInfo.getContentType());
+          System.out.println("***** end file info *****");
+          System.out.println();
+        }
+      }
+    }
   }
 
   // 게시판 글 수정

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -95,15 +96,17 @@ public class BoardController {
   }
 
 //  게시판 글 쓰기 (db에 insert)
+//  클라이언트로부터 전달된 파일 정보를 읽어오기 위해서 MultipartHttpServletRequest 타입의 매개변수를 추가함
   @RequestMapping("/insertBoard.do")
 //  public String insertBoard(@RequestParam String boardTitle, @RequestParam String boardContent, @RequestParam String createId) throws Exception {
-  public String insertBoard(BoardDto board) throws Exception {
+  public String insertBoard(BoardDto board, MultipartHttpServletRequest multiPart) throws Exception {
 //    1. 사용자가 입력한 내용을 전달받음
 //    2. 서비스를 이용하여 DB에 insert
 //    3. 목록 페이지로 리다이렉트
 
 //    클라이언트에서 전달받은 데이터를 매개변수로 하여 서비스의 insertBoard() 메소드 실행
-    boardService.insertBoard(board);
+//    전달받은 파일 정보를 처리하기 위해서 서비스의 insertBoard 메소드에 MultipartHttpServletRequest 타입의 매개변수가 추가됨
+    boardService.insertBoard(board, multiPart);
 
     return "redirect:/board/boardList.do";
   }
