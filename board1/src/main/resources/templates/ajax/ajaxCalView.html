@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax를 사용하는 계산 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+    $(document).ready(function() {
+      $("#btn-cal").on("click", function() {
+        const val1 = $("#num1").val();
+        const val2 = $("#num2").val();
+
+        $.ajax({
+          // 접속할 서버의 주소 입력
+          url: "/ajax/ajaxCalResult",
+          // 서버와 통신 방식, GET/POST
+          type: "POST",
+          // 서버로 전송할 매개변수, JSON 방식으로 전송, 자바의 hashmap 타입과 비슷
+          // controller에서 RequestParam의 설정값과 동일해야 함
+          data: {num1: val1, num2: val2},
+          // 통신 성공 시 전달받을 데이터의 타입 설정, json/text/html
+          dataType: "json",
+          // 통신 성공 시 동작하는 콜백함수
+          // function의 매개변수는 서버에서 전달하는 데이터
+          // 서버에서 전달 받는 데이터는 사용자가 설정하기에 따라서 클라이언트에서 파싱이 필요함
+          success: function(data) {
+            if (data.result == "success") {
+              $("#result").val(data.value);
+            }
+            else if (data.result == "error") {
+              alert("연산 시 오류가 발생했습니다.");
+            }
+          },
+          // 통신 실패 시 동작하는 콜백함수
+          error: function() {
+            alert("ajax 통신 시 오류가 발생했습니다.");
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container my-4">
+  <div class="row">
+    <div class="col-sm-4 mx-auto">
+      <div class="my-3">
+        <label for="num1" class="form-label">첫번째 숫자 : </label>
+        <input type="text" class="form-control" id="num1" name="num1" placeholder="숫자를 입력해주세요">
+      </div>
+      <div class="my-3">
+        <label for="num2" class="form-label">두번째 숫자 : </label>
+        <input type="text" class="form-control" id="num2" name="num2" placeholder="숫자를 입력해주세요">
+      </div>
+      <div class="my-3 d-grid gap-3">
+        <button type="button" class="btn btn-primary" id="btn-cal">계산</button>
+      </div>
+      <div class="mt-4 border-top">
+        <div class="my-3">
+          <label for="result" class="form-label">계산 결과 : </label>
+          <input type="text" class="form-control" id="result" name="result" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
