@@ -48,7 +48,11 @@
   </select>
 
 <!--  게시물 등록 SQL문-->
-  <insert id="insertBoard" parameterType="com.bitc.board1.dto.BoardDto">
+<!--  useGeneratedKeys : insert SQL문 사용 시 새로 생성되는 글번호를 mybatis를 사용하여 생성 -->
+<!--  mysql은 dbms 자체적으로 auto incremental 옵션이 존재하여 자동 번호 증가를 사용할 수 있지만 oracle 같은 경우 해당 기능이 없어서 oracle 함수를 사용하여 기능을 만들어야 함-->
+<!--  mybatis에서 useGeneratedKeys 를 사용하여 자동 증가 옵션을 바로 사용할 수 있음-->
+<!--  keyProperty : useGeneratedKeys 옵션을 사용하여 자동 증가되는 번호를 받아올 수 있음, 반환받을 정보를 저장할 키를 DTO 타입의 필드명으로 지정함-->
+  <insert id="insertBoard" parameterType="com.bitc.board1.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
     INSERT INTO
       sboard (title, contents, create_id, create_dt)
     VALUES
@@ -84,6 +88,50 @@
     WHERE
       board_idx = #{boardIdx}
   </update>
+
+<!--  첨부파일 정보 추가 SQL문-->
+<!--  foreach : 마이바티스의 반복문, 해당 태그 아래의 부분을 반복 실행-->
+<!--  collection : foreach문으로 반복 실행할 대상의 데이터 타입을 설정 (array, list)-->
+<!--  item : foreach문 내에서 사용할 변수 이름 설정-->
+<!--  separator : 데이터를 구분하는 기호 설정, 주로 ','를 사용함-->
+  <insert id="insertBoardFileList" parameterType="com.bitc.board1.dto.BoardFileDto">
+    INSERT INTO sfile
+      (board_idx, original_file_name, stored_file_name, file_size, create_id, create_dt)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.boardIdx}, #{item.originalFileName}, #{item.storedFileName}, #{item.fileSize}, 'admin', NOW())
+    </foreach>
+  </insert>
+
+<!--  지정한 게시글의 첨부 파일 목록보기 SQL 문-->
+  <select id="selectBoardFileList" parameterType="int" resultType="com.bitc.board1.dto.BoardFileDto">
+    SELECT
+      idx, board_idx, original_file_name, FORMAT(ROUND(file_size / 1024), 0) AS file_size
+    FROM
+      sfile
+    WHERE
+      board_idx = #{boardIdx}
+    AND
+      deleted_yn = 'N'
+  </select>
+
+<!--  다운로드할 첨부 파일 정보 가져오기 SQL문-->
+<!--  parameterType에 map을 사용하는 경우는 Mapper 클래스에서 매개변수를 2개 이상 사용할 경우 사용함-->
+<!--  매개변수가 1개일 경우에는 해당 하는 매개변수의 데이터 타입을 그대로 사용-->
+<!--  매개변수가 많을 경우에는 DTO 클래스 타입을 만들어서 DTO 클래스타입을 사용-->
+<!--  매개변수가 2개일 경우에는 DTO 클래스 타입을 만들어서 사용해도 되고, hashmap 타입을 뜻하는 map 을 사용함-->
+  <select id="selectBoardFileInfo" parameterType="map" resultType="com.bitc.board1.dto.BoardFileDto">
+    SELECT
+      original_file_name, stored_file_name, file_size
+    FROM
+      sfile
+    WHERE
+      idx = #{idx}
+    AND
+      board_idx = #{boardIdx}
+    AND
+      deleted_yn = 'N'
+  </select>
 </mapper>
 
 
