@@ -33,18 +33,27 @@ public class BoardServiceImpl implements BoardService{
   }
 
 //  게시판 상세 글 보기
+//  해당 게시글에 첨부된 첨부파일 목록도 함께 불러옴
   @Override
   public BoardDto selectBoardDetail(int boardIdx) throws Exception {
 //    1. 컨트롤러에서 전달된 게시물 번호 가져오기
 //    2. mapper를 사용하여 DB에서 지정한 게시물의 조회수 업데이트
 //    3. mapper를 사용하여 DB에서 지정한 게시물 정보 가져오기
-//    4. 가져온 게시물 정보를 컨트롤러로 리턴
+//    4. mapper를 사용하여 DB에서 지정한 게시물에 첨부된 첨부파일 목록 가져오기
+//    5. 가져온 파일 목록 BoardDto 타입에 저장
+//    6. 가져온 게시물 정보를 컨트롤러로 리턴
 
 //    전달받은 게시물 번호를 사용하여 mybatis mapper의 updateHitCount() 메소드 실행
     boardMapper.updateHitCount(boardIdx);
 //    전달받은 게시물 번호를 사용하여 mybatis mapper의 selectBoardDetail() 메소드 실행
 //    조회된 정보를 BoardDto 클래스 타입의 변수에 대입
     BoardDto board = boardMapper.selectBoardDetail(boardIdx);
+
+//    첨부파일 목록 가져오기
+    List<BoardFileDto> boardFileList = boardMapper.selectBoardFileList(boardIdx);
+
+//    BoardDto 객체에 가져온 첨부파일 리스트를 추가
+    board.setFileList(boardFileList);
 
 //    저장된 정보를 컨트롤러로 리턴
     return board;
@@ -115,4 +124,14 @@ public class BoardServiceImpl implements BoardService{
 //    전달받은 게시물 번호를 매개변수로 사용하여 mybatis mapper의 deleteBoard() 메소드 실행
     boardMapper.deleteBoard(boardIdx);
   }
+
+  @Override
+  public BoardFileDto selectBoardFileInfo(int idx, int boardIdx) throws Exception {
+    return boardMapper.selectBoardFileInfo(idx, boardIdx);
+  }
 }
+
+
+
+
+

@@ -23,4 +23,6 @@ public interface BoardService {
   //  게시판 글 삭제
   void deleteBoard(int boardIdx) throws Exception;
 
+//  다운로드할 파일 정보 가져오기
+  BoardFileDto selectBoardFileInfo(int idx, int boardIdx) throws Exception;
 }
