@@ -1,9 +1,12 @@
 package com.bitc.board1.service;
 
+import com.bitc.board1.common.FileUtils;
 import com.bitc.board1.dto.BoardDto;
+import com.bitc.board1.dto.BoardFileDto;
 import com.bitc.board1.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -19,7 +22,10 @@ public class BoardServiceImpl implements BoardService{
   @Autowired
   private BoardMapper boardMapper;
 
-//  부모인 BoardService에서 상속받은 메소드를 구현
+  @Autowired
+  private FileUtils fileUtils;
+
+  //  부모인 BoardService에서 상속받은 메소드를 구현
   @Override
   public List<BoardDto> selectBoardList() throws Exception {
 //    BoardMapper 인터페이스에서 제공하는 메소드를 실행
@@ -51,27 +57,44 @@ public class BoardServiceImpl implements BoardService{
 //    2. mapper 를 사용하여 DB에 데이터 등록
 
 //    전달받은 데이터를 매개변수로 사용하여 mybatis mapper의 insertBoard() 메소드 실행
-//    boardMapper.insertBoard(board);
+    boardMapper.insertBoard(board);
 
-//    서버로 전달된 파일 정보를 분석
-    if (ObjectUtils.isEmpty(uploadFiles) == false) {
-      Iterator<String> iterator = uploadFiles.getFileNames();
-      String name;
+    List<BoardFileDto> fileList = fileUtils.parseFileInfo(board.getBoardIdx(), uploadFiles);
 
-      while (iterator.hasNext()) {
-        name = iterator.next();
-        List<MultipartFile> fileInfoList = uploadFiles.getFiles(name);
-
-        for (MultipartFile fileInfo : fileInfoList) {
-          System.out.println("***** start file info *****");
-          System.out.println("file name : " + fileInfo.getOriginalFilename());
-          System.out.println("file size : " + fileInfo.getSize());
-          System.out.println("file content type : " + fileInfo.getContentType());
-          System.out.println("***** end file info *****");
-          System.out.println();
-        }
-      }
+//    CollectionUtils : 스프링프레임워크에서 제공하는 클래스
+    if (CollectionUtils.isEmpty(fileList) == false) {
+      boardMapper.insertBoardFileList(fileList);
     }
+
+////    서버로 전달된 파일 정보를 분석
+////    ObjectUtils : 스프링 프레임워크에서 제공하는 유틸 클래스
+////    isEmpty() : 객체의 내용이 비었으면 true, 있으면 false
+//    if (ObjectUtils.isEmpty(uploadFiles) == false) {
+////      업로드된 파일의 파일명 목록을 Iterator 타입으로 가져옴
+////      제네릭을 사용하여 가져오는 데이터 타입을 고정
+//      Iterator<String> iterator = uploadFiles.getFileNames();
+//      String name; // 파일명을 저장하기 위한 변수
+//
+////      파일명 목록이 있는지 확인 후 반복문 실행
+//      while (iterator.hasNext()) {
+////        파일 이름 가져오기
+//        name = iterator.next();
+////        지정한 파일명을 가지고 있는 파일에 대한 모든 정보를 가져옴
+//        List<MultipartFile> fileInfoList = uploadFiles.getFiles(name);
+//
+//        for (MultipartFile fileInfo : fileInfoList) {
+//          System.out.println("***** start file info *****");
+////          원본 파일명 가져오기
+//          System.out.println("file name : " + fileInfo.getOriginalFilename());
+////          파일 크기 가져오기
+//          System.out.println("file size : " + fileInfo.getSize());
+////          파일 확장자 가져오기
+//          System.out.println("file content type : " + fileInfo.getContentType());
+//          System.out.println("***** end file info *****");
+//          System.out.println();
+//        }
+//      }
+//    }
   }
 
   // 게시판 글 수정

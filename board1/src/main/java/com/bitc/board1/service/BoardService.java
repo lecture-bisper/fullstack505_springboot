@@ -1,6 +1,7 @@
 package com.bitc.board1.service;
 
 import com.bitc.board1.dto.BoardDto;
+import com.bitc.board1.dto.BoardFileDto;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface BoardService {
   BoardDto selectBoardDetail(int boardIdx) throws Exception;
 
 //  게시판 글 등록
+//  업로드된 파일 정보 확인을 위한 MultipartHttpServletRequest 타입의 매개변수 추가
   void insertBoard(BoardDto board, MultipartHttpServletRequest multipart) throws Exception;
 
 //  게시판 글 수정
