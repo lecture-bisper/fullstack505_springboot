@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.board2.mapper.Board2Mapper">
+  <select id="selectBoardList" resultType="com.bitc.board2.dto.Board2Dto">
+    SELECT
+      board_idx, title, contents, create_id, create_dt, update_id, update_dt, hit_cnt
+    FROM
+      sboard
+    WHERE
+      deleted_yn = 'N'
+    ORDER BY
+      board_idx DESC
+  </select>
+
+<!--  게시물 상세 보기 SQL문-->
+  <select id="selectBoardDetail" resultType="com.bitc.board2.dto.Board2Dto" parameterType="int">
+    SELECT
+      board_idx, title, contents, create_id, create_dt, update_id, update_dt, hit_cnt
+    FROM
+      sboard
+    WHERE
+      board_idx = #{boardIdx}
+    AND
+      deleted_yn = 'N'
+  </select>
+
+  <insert id="insertBoard" parameterType="com.bitc.board2.dto.Board2Dto" useGeneratedKeys="true" keyProperty="boardIdx">
+    INSERT INTO
+      sboard (title, contents, create_id, create_dt)
+    VALUES
+      (#{title}, #{contents}, #{createId}, NOW())
+  </insert>
+
+<!--  게시물 수정 SQL문-->
+  <update id="updateBoard" parameterType="com.bitc.board2.dto.Board2Dto">
+    UPDATE
+      sboard
+    SET
+      title = #{title}, contents = #{contents}, update_id = #{updateId}, update_dt = NOW()
+    WHERE
+      board_idx = #{boardIdx}
+  </update>
+
+<!--  게시물 삭제 SQL문-->
+  <delete id="deleteBoard" parameterType="int">
+    UPDATE
+      sboard
+    SET
+      deleted_yn = 'Y'
+    WHERE
+      board_idx = #{idx}
+  </delete>
+
+<!--  게시물 조회수 업데이트 SQL문-->
+  <update id="updateHitCount" parameterType="int">
+    UPDATE
+      sboard
+    SET
+      hit_cnt = hit_cnt + 1
+    WHERE
+      board_idx = #{boardIdx}
+  </update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
