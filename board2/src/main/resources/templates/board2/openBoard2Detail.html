@@ -111,12 +111,6 @@
     </div>
     <div class="row my-3">
       <div class="col-sm">
-        <label for="files" class="form-label">첨부파일 : </label>
-        <a class="btn btn-link" id="files" th:each="list : ${board.fileList}" th:text="|${list.originalFileName} (${list.fileSize} kb)|" th:href="@{/board/downloadBoardFile(idx=${list.idx}, boardIdx=${list.boardIdx})}"></a>
-      </div>
-    </div>
-    <div class="row my-3">
-      <div class="col-sm">
         <button type="button" class="btn btn-secondary" id="btn-list">목록</button>
       </div>
       <div class="col-sm d-flex justify-content-end">

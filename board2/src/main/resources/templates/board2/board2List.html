@@ -25,6 +25,8 @@
   </div>
 </header>
 
+<p class="fs-2 text-center" th:text="${session.userId}"></p>
+
 <main class="container my-4">
   <table class="table table-hover table-striped">
     <colgroup>
@@ -54,7 +56,7 @@
       <tr th:if="${#lists.size(boardList)} > 0" th:each="item : ${boardList}">
         <td th:text="${item.boardIdx}">1</td>
         <td>
-          <a href="/board/openBoardDetail.do?boardIdx=" th:attrappend="href=${item.boardIdx}" th:text="${item.title}" class="text-decoration-none">테스트 제목 1</a>
+          <a href="/board2/openBoard2Detail.do?boardIdx=" th:attrappend="href=${item.boardIdx}" th:text="${item.title}" class="text-decoration-none">테스트 제목 1</a>
         </td>
         <td th:text="${item.createId}">테스터 1</td>
         <td th:text="${item.createDt}">2023-06-01 12:25:00</td>
