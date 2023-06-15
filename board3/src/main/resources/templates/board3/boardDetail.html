@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+    $(document).ready(function() {
+      $("#btn-list").on("click", function() {
+        history.back();
+      });
+
+      // 스프링 프레임워크 사용 시 form 태그 안에 input 태그 중 name 속성이 '_method'인 태그가 있을 경우 해당 태그의 value 값에 따라 데이터 전송 방식을 변경할 수 있음
+      // HTML 태그의 form 태그는 method를 GET, POST만 사용됨
+      // REST 방식 사용 시 PUT, DELETE를 사용해야 하기 때문에 input 태그 중 name 속성값이 '_method'인 태그를 사용하여 통신방식을 변경하도록 하고 있음
+      $("#btn-delete").on("click", function() {
+        // id가 method인 input 태그의 value 속성값을 'DELETE'로 변경
+        $("#method").val("DELETE");
+        const frm = $("#frm")[0];
+        frm.action = "/board3/" + $("#boardIdx").val();
+        frm.submit();
+      });
+
+      $("#btn-update").on("click", function() {
+        // id가 method인 input 태그의 value 속성값을 'PUT'으로 변경
+        $("#method").val("PUT");
+        const frm = $("#frm")[0]; // form 태그 가져오기
+        frm.action = "/board3/" + $("#boardIdx").val(); // form태그의 action 속성값 변경
+        frm.submit();
+      });
+    });
+  </script>
+</head>
+<body>
+<header th:replace="~{layout/header :: header-basic}"></header>
+
+<main class="container my-4">
+  <form id="frm" method="POST">
+    <div class="row my-3">
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">글번호</span>
+          <input type="text" class="form-control" id="boardIdx" name="boardIdx" readonly th:value="${board.boardIdx}">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-text">글제목</span>
+          <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요" th:value="${board.title}">
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">조회수</span>
+          <input type="text" class="form-control" readonly th:value="${board.hitCnt}">
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">작성자</span>
+          <input type="text" class="form-control" readonly th:value="${board.createId}">
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">등록날짜</span>
+          <input type="text" class="form-control" readonly th:value="${board.createDt}">
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">수정자</span>
+          <input type="text" class="form-control" name="updateId" placeholder="사용자 ID를 입력하세요" th:value="${board.updateId}">
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="input-group">
+          <span class="input-group-text">수정날짜</span>
+          <input type="text" class="form-control" readonly th:value="${board.updateDt}">
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-sm">
+        <label for="contents" class="form-label">글 내용</label>
+        <textarea class="form-control" id="contents" name="contents" rows=10 placeholder="내용을 입력하세요" th:text="${board.contents}"></textarea>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-sm">
+        <button type="button" class="btn btn-secondary" id="btn-list">목록</button>
+      </div>
+      <div class="col-sm d-flex justify-content-end">
+        <button type="button" class="btn btn-danger me-2" id="btn-delete">삭제</button>
+        <button type="button" class="btn btn-warning" id="btn-update">수정</button>
+      </div>
+    </div>
+<!--    REST 방식 사용 시 form 태그의 데이터 전송 방식을 변경하기 위한 태그-->
+    <input type="hidden" id="method" name="_method">
+  </form>
+</main>
+
+<footer th:replace="~{layout/footer :: footer-basic}"></footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
