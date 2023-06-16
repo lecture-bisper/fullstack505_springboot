@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1>addressList.html</h1>
+
+  <table class="table table-hover table-striped my-3">
+    <thead>
+      <tr>
+        <th>주소ID</th>
+        <th>주소</th>
+        <th>상세주소</th>
+        <th>구역</th>
+        <th>도시ID</th>
+        <th>우편번호</th>
+        <th>전화번호</th>
+        <th>수정날짜</th>
+      </tr>
+    </thead>
+    <tbody>
+<!--    getList() : PageInfo 클래스에서 제공하는 메소드, PageInfo 클래스가 가지고 있는 list 를 출력 -->
+<!--    기존에 사용하던 방식대로 사용할 수 있음 -->
+      <tr th:if="${#lists.size(addressList.getList())} > 0" th:each="item : ${addressList.getList()}">
+        <td th:text="${item.addressId}">주소ID</td>
+        <td th:text="${item.address}">주소</td>
+        <td th:text="${item.address2}">상세주소</td>
+        <td th:text="${item.district}">구역</td>
+        <td th:text="${item.cityId}">도시ID</td>
+        <td th:text="${item.postalCode}">우편번호</td>
+        <td th:text="${item.phone}">전화번호</td>
+        <td th:text="${item.lastUpdate}">수정날짜</td>
+      </tr>
+      <tr th:unless="${#lists.size(addressList.getList())} > 0">
+        <td colspan="8">데이터가 없습니다.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="my-3">
+    <ul class="pagination justify-content-center">
+<!--      이전 페이지 버튼-->
+<!--      th:classappend : thymeleaf에서 제공하는 클래스 추가 명령 -->
+<!--      getPrePage() : 이전 페이지의 페이지 번호 출력 -->
+<!--      th:href : a 태그의 href 속성을 재설정, /page/addressList 주소의 파라미터명으로 pageNum을 사용하고 파라미터 값으로 이전 페이지 번호를 사용-->
+      <li class="page-item" th:classappend="${addressList.getPrePage() == 0} ? 'disabled'">
+        <a class="page-link" href="#" th:href="@{/page/addressList(pageNum=${addressList.getPrePage()})}">&laquo;</a>
+      </li>
+
+<!--      네비게이션 버튼-->
+<!--      th:each 를 사용하여 페이지네이션 버튼을 생성함 -->
+<!--      #numbers.sequence(시작숫자, 끝숫자) : thymeleaf 에서 제공하는 유틸리티 객체와 메소드, 시작숫자부터, 끝 숫자까지의 숫자 배열을 생성-->
+<!--      PageInfo 클래스에서 제공하는 navigateFirstPage(), navigateLastPage() 를 사용하여 숫자 배열을 생성, 해당 값을 하나씩 꺼내어 사용-->
+<!--      배열에서 꺼낸 숫자와 PageInfo 클래스에서 제공하는 현재 페이지 번호가 같으면 'active' 클래스 추가 -->
+      <li class="page-item" th:each="page : ${#numbers.sequence(addressList.getNavigateFirstPage(), addressList.getNavigateLastPage())}" th:classappend="${page == addressList.getPageNum()} ? 'active'">
+<!--        배열에서 꺼낸 값을 a태그의 텍스트로 사용-->
+<!--        접속할 페이지 번호를 생성-->
+        <a class="page-link" href="#" th:text="${page}" th:href="@{/page/addressList(pageNum=${page})}">1</a>
+      </li>
+
+<!--      다음 페이지 버튼-->
+<!--      이전 페이지 부분과 동일-->
+<!--      getNextPage() : 다음 페이지 번호 출력, 다음 페이지가 없으면 0 출력,  -->
+      <li class="page-item" th:classappend="${addressList.getNextPage() == 0} ? 'disabled'">
+        <a class="page-link" href="#" th:href="@{/page/addressList(pageNum=${addressList.getNextPage()})}">&raquo;</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<p th:text="${addressList}"></p>
+
+<footer class="container-fluid mt-5 p-5 border-top">
+  <p class="lead text-muted text-center">made by fullstack 505</p>
+</footer>
+<br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
