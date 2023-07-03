@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+
+  <style>
+
+  </style>
+  <script>
+    $(document).ready(function() {
+      $("#btn-dailyBoxOffice1").on("click", function() {
+        let targetDate = $("#date").val();
+
+        $.ajax({
+          url: "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=" + targetDate,
+          type: "GET",
+          success: function(data) {
+            <!--      rank, movieNm, openDt, audiCnt, audiAcc-->
+            const boxOfficeResult = data.boxOfficeResult;
+            const dailyBoxOfficeList = boxOfficeResult.dailyBoxOfficeList;
+
+            const tbody = $("#table-kobis1 > tbody");
+            tbody.empty();
+
+            for (let i = 0; i < dailyBoxOfficeList.length; i++) {
+              let tag = "<tr>";
+              tag += "<td>" + dailyBoxOfficeList[i].rank + "</td>";
+              tag += "<td>" + dailyBoxOfficeList[i].movieNm + "</td>";
+              tag += "<td>" + dailyBoxOfficeList[i].openDt + "</td>";
+              tag += "<td>" + dailyBoxOfficeList[i].audiCnt + "</td>";
+              tag += "<td>" + dailyBoxOfficeList[i].audiAcc + "</td>";
+              tag += "</tr>";
+
+              tbody.append(tag);
+            }
+          },
+          error: function() {
+            alert("서버와 통신 중 오류가 발생했습니다.");
+          }
+        });
+      });
+
+      $("#btn-dailyBoxOffice2").on("click", function() {
+        const date = $("#date2").val();
+
+        $.ajax({
+          url: "/parse/kobis/dailyBoxOffice",
+          type: "POST",
+          data: {targetDt: date},
+          success: function(data) {
+            const tbody = $("#table-kobis2 > tbody");
+            tbody.empty();
+
+            for (let i = 0; i < data.length; i++) {
+              let tag = "<tr>";
+              tag += "<td>" + data[i].rank + "</td>";
+              tag += "<td>" + data[i].movieNm + "</td>";
+              tag += "<td>" + data[i].openDt + "</td>";
+              tag += "<td>" + data[i].audiCnt + "</td>";
+              tag += "<td>" + data[i].audiAcc + "</td>";
+              tag += "</tr>";
+
+              tbody.append(tag);
+            }
+          },
+          error: function() {
+            alert("서버와 통신 중 오류가 발생했습니다.");
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<main class="container my-4">
+  <div class="my-3">
+    <h3>JS에서 AJAX로 영화진흥원 Open API에 직접 접근하기</h3>
+    <table class="table table-striped table-hover" id="table-kobis1">
+      <colgroup>
+        <col style="width: 10%">
+        <col style="width: 40%">
+        <col style="width: 20%">
+        <col style="width: 15%">
+        <col style="width: 15%">
+      </colgroup>
+      <thead>
+      <tr>
+        <th>순위</th>
+        <th>영화명</th>
+        <th>개봉일</th>
+        <th>당일 관람객</th>
+        <th>누적 관람객</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>범죄도시3</td>
+          <td>2023-05-31</td>
+          <td>78766</td>
+          <td>9077664</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="my-3 d-flex justify-content-end">
+      <div class="me-3">
+        <input type="text" id="date" class="form-control" placeholder="20230620" value="20230620">
+      </div>
+      <button class="btn btn-primary" id="btn-dailyBoxOffice1">불러오기</button>
+    </div>
+  </div>
+
+  <br><hr><br>
+
+  <div class="my-3">
+    <h3>우리 스프링서버로 AJAX로 통신하여 데이터 가져오기</h3>
+    <table class="table table-striped table-hover" id="table-kobis2">
+      <colgroup>
+        <col style="width: 10%">
+        <col style="width: 40%">
+        <col style="width: 20%">
+        <col style="width: 15%">
+        <col style="width: 15%">
+      </colgroup>
+      <thead>
+      <tr>
+        <th>순위</th>
+        <th>영화명</th>
+        <th>개봉일</th>
+        <th>당일 관람객</th>
+        <th>누적 관람객</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>범죄도시3</td>
+        <td>2023-05-31</td>
+        <td>78766</td>
+        <td>9077664</td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="my-3 d-flex justify-content-end">
+      <div class="me-2">
+        <input type="text" class="form-control" id="date2" placeholder="20230620" value="20230620">
+      </div>
+      <button class="btn btn-primary" id="btn-dailyBoxOffice2">불러오기</button>
+    </div>
+  </div>
+
+</main>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
