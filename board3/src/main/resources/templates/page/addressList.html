@@ -25,29 +25,38 @@
         type: "POST",
         data: {pageNum: num},
         success: function(data) {
+          // pagination 이 적용된 ul 태그 찾기
           const tagPagination = $("#paginationAjax");
 
+          // 기존 자식 태그 삭제
           tagPagination.empty();
 
+          // 이전 페이지 버튼 생성
           const tagPageBtnPrev = $("<li class=\"page-item\"></li>");
+          // 이전 페이지 번호가 0이면 disabled 클래스 추가, 아니면 disabled 클래스 삭제
           data.prePage == 0 ? tagPageBtnPrev.addClass("disabled") : tagPageBtnPrev.removeClass("disabled");
+          // a 태그 추가 및 클릭 이벤트 추가
           const tagPageBtnPrevLink = $("<a class=\"page-link\" onclick='pagination(" + data.prePage + ")'>&laquo;</a>");
           tagPageBtnPrev.append(tagPageBtnPrevLink);
           tagPagination.append(tagPageBtnPrev);
 
-
+          // 페이지 번호 버튼 생성
           for (let i = 0; i < data.navigatepageNums.length; i++) {
             const tagPageBtnNum = $('<li class="page-item"></li>');
+            // 현재 페이지 번호와 페이지버튼의 값이 같으면 active 클래스 추가, 아니면 active 클래스 삭제
             data.pageNum == data.navigatepageNums[i] ? tagPageBtnNum.addClass("active") : tagPageBtnNum.removeClass("active");
 
+            // a 태그 추가 및 클릭 이벤트 추가
             const tagPageBtnNumLink =$('<a class="page-link" onclick="pagination(' + data.navigatepageNums[i] + ')"></a>');
             tagPageBtnNumLink.append(data.navigatepageNums[i]);
 
+            // li 태그에 a 태그를 자식 태그로 추가
             tagPageBtnNum.append(tagPageBtnNumLink);
-
+            // ul 태그에 li 태그를 자식 태그로 추가
             tagPagination.append(tagPageBtnNum);
           }
 
+          // 다음 페이지 버튼 생성
           const tagPageBtnNext = $("<li class=\"page-item\"></li>");
           data.nextPage == 0 ? tagPageBtnNext.addClass("disabled") : tagPageBtnNext.removeClass("disabled");
           const tagPageBtnNextLink = $('<a class="page-link" onclick="pagination(' + data.nextPage + ')">&raquo;</a>');
@@ -132,10 +141,6 @@
         <a class="page-link" href="#">&laquo;</a>
       </li>
 
-<!--      <li class="page-item active">-->
-<!--        <a class="page-link" href="#">1</a>-->
-<!--      </li>-->
-
       <li class="page-item" th:each="page : ${#numbers.sequence(addressList.getNavigateFirstPage(), addressList.getNavigateLastPage())}" th:classappend="${page == addressList.getPageNum()} ? 'active'">
         <a class="page-link" href="#" th:text="${page}" th:href="@{/page/addressList(pageNum=${page})}">1</a>
       </li>
@@ -147,8 +152,8 @@
   </div>
 </div>
 
-<p th:text="${addressList}"></p>
-<p id="test"></p>
+<!--<p th:text="${addressList}"></p>-->
+<!--<p id="test"></p>-->
 
 <footer class="container-fluid mt-5 p-5 border-top">
   <p class="lead text-muted text-center">made by fullstack 505</p>
