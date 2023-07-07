@@ -19,7 +19,7 @@ public class AddressServiceImpl implements AddressService {
 //    두번째 매개변수 : 현재 페이지에 출력한 게시물 수
 //    PageHelper 라이브러리가 mapper를 사용하여 전체 데이터를 불러온 후 자동으로 제어함
 //    mapper의 sql문에 limit로 개수 제한을 할 필요가 없음
-    PageHelper.startPage(pageNum, 30);
+    PageHelper.startPage(pageNum, 10);
     return addressMapper.getAddressList();
   }
 }

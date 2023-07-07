@@ -15,7 +15,50 @@
 
   </style>
   <script>
+    $(document).ready(function() {
+      pagination(1);
+    });
 
+    function pagination(num) {
+      $.ajax({
+        url: "/page/addressListAjax",
+        type: "POST",
+        data: {pageNum: num},
+        success: function(data) {
+          const tagPagination = $("#paginationAjax");
+
+          tagPagination.empty();
+
+          const tagPageBtnPrev = $("<li class=\"page-item\"></li>");
+          data.prePage == 0 ? tagPageBtnPrev.addClass("disabled") : tagPageBtnPrev.removeClass("disabled");
+          const tagPageBtnPrevLink = $("<a class=\"page-link\" onclick='pagination(" + data.prePage + ")'>&laquo;</a>");
+          tagPageBtnPrev.append(tagPageBtnPrevLink);
+          tagPagination.append(tagPageBtnPrev);
+
+
+          for (let i = 0; i < data.navigatepageNums.length; i++) {
+            const tagPageBtnNum = $('<li class="page-item"></li>');
+            data.pageNum == data.navigatepageNums[i] ? tagPageBtnNum.addClass("active") : tagPageBtnNum.removeClass("active");
+
+            const tagPageBtnNumLink =$('<a class="page-link" onclick="pagination(' + data.navigatepageNums[i] + ')"></a>');
+            tagPageBtnNumLink.append(data.navigatepageNums[i]);
+
+            tagPageBtnNum.append(tagPageBtnNumLink);
+
+            tagPagination.append(tagPageBtnNum);
+          }
+
+          const tagPageBtnNext = $("<li class=\"page-item\"></li>");
+          data.nextPage == 0 ? tagPageBtnNext.addClass("disabled") : tagPageBtnNext.removeClass("disabled");
+          const tagPageBtnNextLink = $('<a class="page-link" onclick="pagination(' + data.nextPage + ')">&raquo;</a>');
+          tagPageBtnNext.append(tagPageBtnNextLink);
+          tagPagination.append(tagPageBtnNext);
+        },
+        error: function() {
+          alert("ddd");
+        }
+      });
+    }
   </script>
 </head>
 <body>
@@ -83,9 +126,29 @@
       </li>
     </ul>
   </div>
+  <div class="my-3">
+    <ul class="pagination justify-content-center" id="paginationAjax">
+      <li class="page-item disabled">
+        <a class="page-link" href="#">&laquo;</a>
+      </li>
+
+<!--      <li class="page-item active">-->
+<!--        <a class="page-link" href="#">1</a>-->
+<!--      </li>-->
+
+      <li class="page-item" th:each="page : ${#numbers.sequence(addressList.getNavigateFirstPage(), addressList.getNavigateLastPage())}" th:classappend="${page == addressList.getPageNum()} ? 'active'">
+        <a class="page-link" href="#" th:text="${page}" th:href="@{/page/addressList(pageNum=${page})}">1</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link" href="#">&raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <p th:text="${addressList}"></p>
+<p id="test"></p>
 
 <footer class="container-fluid mt-5 p-5 border-top">
   <p class="lead text-muted text-center">made by fullstack 505</p>

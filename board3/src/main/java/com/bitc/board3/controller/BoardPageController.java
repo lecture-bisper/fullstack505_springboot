@@ -3,10 +3,13 @@ package com.bitc.board3.controller;
 import com.bitc.board3.dto.AddressDto;
 import com.bitc.board3.service.AddressService;
 import com.github.pagehelper.PageInfo;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,6 +50,13 @@ public class BoardPageController {
     mv.addObject("addressList", p);
 
     return mv;
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/page/addressListAjax")
+  public Object addressListAjax(@RequestParam(required = false, defaultValue = "1") int pageNum) throws Exception {
+    PageInfo<AddressDto> p = new PageInfo<>(addressService.getAddressList(pageNum), 10);
+    return p;
   }
 }
 
