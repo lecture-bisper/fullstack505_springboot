@@ -22,8 +22,8 @@ import java.util.List;
 // deleteAll() : sql의 delete 명령과 동일, 전체 삭제
 
 public interface JpaBoardRepository extends JpaRepository<JpaBoardEntity, Integer> {
-//  메소드 쿼리 : CrudRepository에서 지원하는 기본 쿼리 메소드를 가지고 원하는 모든 기능을 사용할 수 없기 때문에 특정 키워드를 사용하여 사용자 정의 메소드를 생성하는 방식의 메소드
-//  메소드 쿼리를 사용하여 필요한 명령를 전달함
+//  쿼리 메소드 : CrudRepository에서 지원하는 기본 쿼리 메소드를 가지고 원하는 모든 기능을 사용할 수 없기 때문에 특정 키워드를 사용하여 사용자 정의 메소드를 생성하는 방식의 메소드
+//  쿼리 메소드를 사용하여 필요한 명령를 전달함
   List<JpaBoardEntity> findAllByOrderByBoardIdxDesc();
   
 //  @Query : JpaRepository에서 제공하는 기본 명령어 및 메소드 쿼리로 만들기 힘든 복잡한 쿼리문의 경우 JPQL 문법을 통해서 SQL 쿼리문을 직접 생성하여 실행할 수 있도록 해주는 어노테이션

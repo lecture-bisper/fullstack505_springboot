@@ -16,12 +16,8 @@
   </script>
 </head>
 <body>
-  <header class="p-5 mt-4 border-bottom">
-    <div class="container text-center">
-      <h1 class="">JPA를 사용한 게시판</h1>
-      <p>목록 게시판</p>
-    </div>
-  </header>
+  <header class="p-5 mt-4 border-bottom" th:replace="/board/Header :: header"></header>
+
   <main class="container">
     <div class="row">
       <div class="col-sm">
@@ -50,13 +46,14 @@
             </tr>
           </tbody>
         </table>
-        <a href="/jpa/board/write" class="btn btn-primary">글 쓰기</a>
+        <div class="d-flex justify-content-end">
+          <a href="/jpa/board/write" class="btn btn-primary">글 쓰기</a>
+        </div>
       </div>
     </div>
   </main>
-  <footer class="border-top mt-5 p-5">
-    <p class="lead muted text-center">made by fullstack505</p>
-  </footer>
+
+  <footer class="border-top mt-5 p-5" th:replace="/board/Footer :: footer"></footer>
 </body>
 </html>
 
